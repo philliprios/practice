@@ -8,15 +8,19 @@
 
 		#mainForm {
 			display: block;
+			margin: 200px;
 		}
 
 		#inputForm {
     		display: none;
+			margin: 200px;
 		}
 
 		#listForm {
 			display: none;
+			margin: 200px;
 		}
+		
 	</style>
 
     <head>
@@ -25,19 +29,22 @@
     <body>
         <div id='mainForm'>
             <center>
-                <label for="fbs">Food Budget Suggestion</label>
+                <label for="fbs">Food Budget Suggestion</label><br><br>
                 <Button onclick='nextMain()'>Proceed</Button>
             </center>
         </div>
         <div id='inputForm'>
-			input
+		<center>
 			<label for="">Enter Budget: </label>
-			<input type="text" id='budget'>
+			<br><br>
+			<input type="text" id='budget'><br><br>
 			<button id='enter-budget' onclick='saveBudget()'>Enter</button>
+		</center>
 		</div>     
 		<div id='listForm'>
-			list
+		<center>
 			<span id='post-budget'></SPAn>
+		</center>
 		</div>   
 		
 		<script>
