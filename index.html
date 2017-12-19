@@ -8,7 +8,7 @@
 
 		#mainForm {
 			display: block;
-			margin-top: 250px;
+			margin-top: 80px;
 		}
 
 		#inputForm {
@@ -18,7 +18,12 @@
 
 		#listForm {
 			display: none;
-			margin-top: 60px;
+			margin-top: 40px;
+		}
+		
+		#showForm {
+			display: none;
+			margin-top: 40px;
 		}
 		
 	</style>
@@ -30,7 +35,9 @@
     <body class='container-fluid'>
         <div id='mainForm' class='container-fluid'>
             <center>
+				<img src='logo-fbs.png' style='width: 200px'><br><br>
                 <label for="fbs">Food Budget Suggestion</label><br><br>
+				<label for="fbs">(Kanto version)</label><br><br>
                 <Button onclick='nextMain()' class='btn btn-default'>Proceed</Button>
             </center>
         </div>
@@ -40,7 +47,7 @@
 			<br><br>
 			<input type="text" id='budget' class='form-control' style='width: 50%;'><br>
 			<button id='enter-budget' onclick='saveBudget()' class='btn btn-default' style='width: 25%;'>Enter</button>
-			<button id='back' onclick='nextMain()' class='btn btn-default' style='width: 25%;'>Cancel</button>
+			<button id='back' onclick='backMenu()' class='btn btn-default' style='width: 25%;'>Cancel</button>
 		</center>
 		</div>     
 		<div id='listForm' class='container-fluid' style='width: 100%;'>
@@ -53,7 +60,11 @@
                         <br><br>
                         <label for="price">Budget Left: <span id='budgetLeft'></span></label>
                         <br><br>
-                        <button id='clear' onclick="clear()" class='btn btn-default'>Clear</button>
+                        <button id='clear' onclick='clearShow()' class='btn btn-default'>Clear</button>
+					
+						<button id='show' onclick='showList()' class='btn btn-default'>Show List</button>
+						
+						<button id='back' onclick='backMenu()' class='btn btn-default'>Back to Menu</button>
 						<br><br>
             </div>
 			<center>
@@ -101,23 +112,41 @@
 		</center>
 		</div>   
 		
+		<div id='showForm' class='container-fluid'>
+		<center>
+			<h3>Selected Items</h3>
+			<br><br>
+			<p id='show-select'></p>
+			<br><br>
+			Total: <p id='show-total'></p>
+			<br><br>
+			<button onclick='backList()' class='btn btn-default'>Back</button>
+			<button onclick='newList()' class='btn btn-default'>New</button>
+		</center>
+		</div>
+		
 		<script>
 			
 			var items = [];
             var input;
             var selectItems = [];
             var selectPrice = [], itemListName = [], itemListPrice = [], itemListIndex = [];
+			var selectItemPrice = [], selectItemName = [], selectItemIndex = [] ;
             var tempBudget = 0;
             var selectItem = "";
-            var initialBudget = 0;
-            var budget = 500;
+            var budget = 0;
+			var initialBudget;
             var temp = 0, total = 0;    
 			
 			getJSONData();
+			initialBudget = budget;
 			
-			function clear() {
+			function clearShow() {	
                 document.getElementById('priceValue').innerText = "";
                 document.getElementById('budgetLeft').innerText = "";
+				temp = initialBudget;
+				total = 0;			
+				selectItemPrice = [], selectItemName = [], selectItemIndex = [] ;
             }
 			
 			function getJSONData(){
@@ -143,25 +172,87 @@
 				var mainForm = document.getElementById("mainForm");
                 var inputForm = document.getElementById("inputForm");
                 var listForm = document.getElementById("listForm");
+				var showForm = document.getElementById("showForm");
 				mainForm.style.display = "none";
                 listForm.style.display = "none";
                 inputForm.style.display = "block";
+				showForm.style.display = "none";
             }
 
 			function nextInput() {
 				var mainForm = document.getElementById("mainForm");
                 var inputForm = document.getElementById("inputForm");
                 var listForm = document.getElementById("listForm");
+				var showForm = document.getElementById("showForm");
 				mainForm.style.display = "none";
                 inputForm.style.display = "none";
                 listForm.style.display = "block";
+				showForm.style.display = "none";
+			}
+			
+			function showList() {
+			
+				var mainForm = document.getElementById("mainForm");
+                var inputForm = document.getElementById("inputForm");
+                var listForm = document.getElementById("listForm");
+				var showForm = document.getElementById("showForm");
+				mainForm.style.display = "none";
+                inputForm.style.display = "none";
+                listForm.style.display = "none";
+				showForm.style.display = "block";
+				
+				listSelect();
+			}
+			
+			function listSelect(){
+				var show = "";
+				for(var i = 0 ; i < selectItemIndex.length ; i++) {
+					show += selectItemName[i] + ' --------- ' + selectItemPrice[i] + '\n';
+				}
+				
+				document.getElementById('show-select').innerText = show;
+				document.getElementById('show-total').innerText = total;
+				
+			}
+			
+			function backList(){
+				nextInput();
+			}	
+			
+			function newList(){
+				nextInput();
+				clearShow();
+			}
+			
+			function backMenu(){
+				
+				if (confirm("Are You sure?") == true) {
+					document.getElementById('budget').innerText = '';
+					var mainForm = document.getElementById("mainForm");
+					var inputForm = document.getElementById("inputForm");
+					var listForm = document.getElementById("listForm");
+					var showForm = document.getElementById("showForm");
+					mainForm.style.display = "block";
+					listForm.style.display = "none";
+					inputForm.style.display = "none";
+					showForm.style.display = "none";
+					clearShow();
+				} else {
+					nextInput();
+				}
 			}
 
 			function saveBudget() {
 				nextInput();
-				var budget = document.getElementById("budget").value;	
-				alert('okay' + budget);
-				document.getElementById('post-budget').innerHTML = budget;
+				budget = parseInt(document.getElementById("budget").value);	
+				
+				if(!isNaN(budget)) {
+					alert('Success!');
+					document.getElementById('initialBudget').innerText = budget;
+				}else {
+					alert('Invalid!');
+					nextMain();
+				}
 			}
 			
 			function selectRow(x) {
@@ -174,6 +265,11 @@
                 else if(selectPrice.push(itemListPrice[x.rowIndex-1])){
                     console.log('success kaayo!');
                     console.log('total ' + temp);
+					
+					selectItemIndex.push(itemListIndex[x.rowIndex-1]);
+					selectItemName.push(itemListName[x.rowIndex-1]);
+					selectItemPrice.push(itemListPrice[x.rowIndex-1]);
+				
                     document.getElementById('priceValue').innerText = total;
                     document.getElementById('budgetLeft').innerText = temp;
                     document.getElementById('initialBudget').innerText = budget;
