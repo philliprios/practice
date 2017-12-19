@@ -8,46 +8,137 @@
 
 		#mainForm {
 			display: block;
-			margin: 200px;
+			margin-top: 250px;
 		}
 
 		#inputForm {
     		display: none;
-			margin: 200px;
+			margin-top: 200px;
 		}
 
 		#listForm {
 			display: none;
-			margin: 200px;
+			margin-top: 60px;
 		}
 		
 	</style>
 
     <head>
         <title>Hello World</title>
+		<link rel='stylesheet' href='bootstrap.min.css'>
     </head>
-    <body>
-        <div id='mainForm'>
+    <body class='container-fluid'>
+        <div id='mainForm' class='container-fluid'>
             <center>
                 <label for="fbs">Food Budget Suggestion</label><br><br>
-                <Button onclick='nextMain()'>Proceed</Button>
+                <Button onclick='nextMain()' class='btn btn-default'>Proceed</Button>
             </center>
         </div>
-        <div id='inputForm'>
+        <div id='inputForm' class='container-fluid'>
 		<center>
 			<label for="">Enter Budget: </label>
 			<br><br>
-			<input type="text" id='budget'><br><br>
-			<button id='enter-budget' onclick='saveBudget()'>Enter</button>
+			<input type="text" id='budget' class='form-control' style='width: 50%;'><br>
+			<button id='enter-budget' onclick='saveBudget()' class='btn btn-default' style='width: 25%;'>Enter</button>
+			<button id='back' onclick='nextMain()' class='btn btn-default' style='width: 25%;'>Cancel</button>
 		</center>
 		</div>     
-		<div id='listForm'>
-		<center>
+		<div id='listForm' class='container-fluid' style='width: 100%;'>
 			<span id='post-budget'></SPAn>
+			<div class='container-fluid'>
+			
+                        <label for="price">Initial Budget: <span id='initialBudget'></span></label>
+                        <br><br>
+                        <label for="price">Price: <span id='priceValue'></span></label>
+                        <br><br>
+                        <label for="price">Budget Left: <span id='budgetLeft'></span></label>
+                        <br><br>
+                        <button id='clear' onclick="clear()" class='btn btn-default'>Clear</button>
+						<br><br>
+            </div>
+			<center>
+			<div>
+                <table class="table table-hover" style='border: solid 0.5px black;'>
+                    <thead>
+                        <tr>
+                            <th><center>Items</center></th>
+                            <th><center>Unit price</center></th>
+                        </tr>
+                    </thead>
+					<tbody id="table">        
+                                    <tr  onclick='selectRow(this)'>
+                                        <td><center>Buko</center></td>
+                                        <td><center>5</center></td>
+                                    </tr>
+                                    <tr  onclick='selectRow(this)'>
+                                        <td><center>Isaw</center></td>
+                                        <td><center>5</center></td>
+                                    </tr>
+                                    <tr  onclick='selectRow(this)'>
+                                        <td><center>Hotdog</center></td>
+                                        <td><center>8</center></td>
+                                    </tr>
+                                    <tr  onclick='selectRow(this)'>
+                                        <td><center>Chicken Skin</center></td>
+                                        <td><center>5</center></td>
+                                    </tr>
+                                    <tr  onclick='selectRow(this)'>
+                                        <td><center>Rice</center></td>
+                                        <td><center>5</center></td>
+                                    </tr >
+                                    <tr  onclick='selectRow(this)'>
+                                        <td><center>Siomai</center></td>
+                                        <td><center>10</center></td>
+                                    </tr>
+                                    <tr  onclick='selectRow(this)'>
+											<td><center>Manok</center></td>
+                                        <td><center>20</center></td>
+                                    </tr>
+                                
+                    </tbody>
+                </table>                            
+			</div>	
 		</center>
 		</div>   
 		
 		<script>
+			
+			var items = [];
+            var input;
+            var selectItems = [];
+            var selectPrice = [], itemListName = [], itemListPrice = [], itemListIndex = [];
+            var tempBudget = 0;
+            var selectItem = "";
+            var initialBudget = 0;
+            var budget = 500;
+            var temp = 0, total = 0;    
+			
+			getJSONData();
+			
+			function clear() {
+                document.getElementById('priceValue').innerText = "";
+                document.getElementById('budgetLeft').innerText = "";
+            }
+			
+			function getJSONData(){
+                var text = '{"items": [' +
+                    '{"index": 0, "name":"Buko", "price":5},' +
+                    '{"index": 1, "name":"Isaw", "price":5},' +
+                    '{"index": 2, "name":"Hotdog", "price":8},' +
+                    '{"index": 3, "name":"Chicken skin", "price":5},' +
+                    '{"index": 4, "name":"Rice", "price":5},' +
+                    '{"index": 5, "name":"Sioma", "price":10},' +
+                    '{"index": 6, "name":"Manok", "price":20}]}';
+
+                obj = JSON.parse(text);
+
+                for(var i = 0 ; i < 7 ; i++) {
+                    itemListIndex[i] = obj.items[i].index;
+                    itemListName[i] = obj.items[i].name;
+                    itemListPrice[i] = obj.items[i].price;
+                }
+            }
+		
 			function nextMain() {
 				var mainForm = document.getElementById("mainForm");
                 var inputForm = document.getElementById("inputForm");
@@ -72,6 +163,23 @@
 				alert('okay' + budget);
 				document.getElementById('post-budget').innerHTML = budget;
 			}
+			
+			function selectRow(x) {
+                console.log(itemListPrice[x.rowIndex-1]);
+                total = total + itemListPrice[x.rowIndex-1];
+                temp = budget - total;
+                if(temp < -1) {
+                    console.log("Tama na");
+                }
+                else if(selectPrice.push(itemListPrice[x.rowIndex-1])){
+                    console.log('success kaayo!');
+                    console.log('total ' + temp);
+                    document.getElementById('priceValue').innerText = total;
+                    document.getElementById('budgetLeft').innerText = temp;
+                    document.getElementById('initialBudget').innerText = budget;
+                }
+            }
+			
 		</script>
     </body>
 </html>
