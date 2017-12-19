@@ -1,13 +1,71 @@
+<!DOCTYPE html>
 <html>
-	<body>
-		<input type='text' id='input'>
-		<button id='submit' onclick='submit()'>Submit</button>
-	</body>
-	
-	<script>
-		function submit() {
-			var a =document.getElementById('input').value;
-			alert('Okay ' + a);
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
 		}
-	</script>
+
+		#mainForm {
+			display: block;
+		}
+
+		#inputForm {
+    		display: none;
+		}
+
+		#listForm {
+			display: none;
+		}
+	</style>
+
+    <head>
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div id='mainForm'>
+            <center>
+                <label for="fbs">Food Budget Suggestion</label>
+                <Button onclick='nextMain()'>Proceed</Button>
+            </center>
+        </div>
+        <div id='inputForm'>
+			input
+			<label for="">Enter Budget: </label>
+			<input type="text" id='budget'>
+			<button id='enter-budget' onclick='saveBudget()'>Enter</button>
+		</div>     
+		<div id='listForm'>
+			list
+			<span id='post-budget'></SPAn>
+		</div>   
+		
+		<script>
+			function nextMain() {
+				var mainForm = document.getElementById("mainForm");
+                var inputForm = document.getElementById("inputForm");
+                var listForm = document.getElementById("listForm");
+				mainForm.style.display = "none";
+                listForm.style.display = "none";
+                inputForm.style.display = "block";
+            }
+
+			function nextInput() {
+				var mainForm = document.getElementById("mainForm");
+                var inputForm = document.getElementById("inputForm");
+                var listForm = document.getElementById("listForm");
+				mainForm.style.display = "none";
+                inputForm.style.display = "none";
+                listForm.style.display = "block";
+			}
+
+			function saveBudget() {
+				nextInput();
+				var budget = document.getElementById("budget").value;	
+				alert('okay' + budget);
+				document.getElementById('post-budget').innerHTML = budget;
+			}
+		</script>
+    </body>
 </html>
+
