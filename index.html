@@ -38,6 +38,8 @@
     <head>
         <title>Hello World</title>
 		<link rel='stylesheet' href='bootstrap.min.css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
     </head>
     <body>
 		<div id='header' style='color: white;' class='container'>
@@ -48,7 +50,11 @@
 				<img src='logo-fbs.png' style='width: 200px'><br><br>
                 <label for="fbs">Food Budget Suggestion</label><br><br>
 				<label for="fbs">(Kanto version)</label><br><br>
-                <Button onclick='nextMain()' class='btn btn-default'>Proceed</Button>
+                <Button onclick='nextMain()' class='btn btn-default' style='width: 25%'><center>Proceed</center></Button>
+				<br><br>
+                <Button onclick='about()' class='btn btn-default' style='width: 25%'><center>About</center></Button>
+				<br><br>
+                <Button onclick='developer()' class='btn btn-default' style='width: 25%'><center>Developers</center></Button>
             </center>
         </div>
         <div id='inputForm' class='container-fluid'>
@@ -98,7 +104,7 @@
                                     </tr>
                                     <tr  onclick='selectRow(this)'>
                                         <td><center>Hotdog</center></td>
-                                        <td><center>8</center></td>
+											<td><center>8</center></td>
                                     </tr>
                                     <tr  onclick='selectRow(this)'>
                                         <td><center>Chicken Skin</center></td>
@@ -137,6 +143,24 @@
 		</div>
 		
 		<script>
+	  // Initialize Firebase
+		  var config = {
+			apiKey: "AIzaSyDnGe4xr7c2UqcEomBBBEM9pCK5F5J7JGA",
+			authDomain: "food-budget-suggestion-app.firebaseapp.com",
+			databaseURL: "https://food-budget-suggestion-app.firebaseio.com",
+			projectId: "food-budget-suggestion-app",
+			storageBucket: "food-budget-suggestion-app.appspot.com",
+			messagingSenderId: "75561022399"
+		  };
+		  firebase.initializeApp(config);
+		  
+		  var database = firebase.database();
+            var ref = database.ref('items');
+            var sel = database.ref('selected');
+            var rootRef = database.ref();
+		</script>
+		
+		<script>
 			
 			var items = [];
             var input;
@@ -147,8 +171,9 @@
             var selectItem = "";
             var budget = 0;
 			var initialBudget;
-            var temp = 0, total = 0;    
+            var temp = 0, total = 0, tempTotal = 0;    
 			
+			readData();
 			getJSONData();
 			initialBudget = budget;
 			
@@ -270,6 +295,7 @@
                 temp = budget - total;
                 if(temp < -1) {
                     console.log("Tama na");
+					tempTotal = total;
                 }
                 else if(selectPrice.push(itemListPrice[x.rowIndex-1])){
                     console.log('success kaayo!');
@@ -279,10 +305,35 @@
 					selectItemName.push(itemListName[x.rowIndex-1]);
 					selectItemPrice.push(itemListPrice[x.rowIndex-1]);
 				
-                    document.getElementById('priceValue').innerText = total;
+                    document.getElementById('priceValue').innerText = tempTotal;
                     document.getElementById('budgetLeft').innerText = temp;
                     document.getElementById('initialBudget').innerText = budget;
                 }
+            }
+			
+			function readData() {
+                var read = rootRef.child('items').orderByChild('price').endAt(500);   
+
+                read.on('child_added', snap => {
+                    
+                    let name = snap.child('name').val();
+                    let price = snap.child('price').val();
+
+                    
+                    let tableRow = "<tr onclick='selectRow(this)'>";
+                    tableRow += "<td id='selectedItem'><span><center>"+ name +"</center></span></td>";
+                    tableRow += "<td id='selectedPrice'><center>" + price + "</center></td></tr>";
+                
+                    $('#table').append(tableRow);
+                
+                    var data = {name, price};
+                    
+                    if(items.push(data)){
+                    console.log("Success");
+                    }else {
+                    console.log("Failed");
+                    }
+                });
             }
 			
 		</script>
