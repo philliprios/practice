@@ -7,7 +7,7 @@
 		}
 
 		#mainForm {
-			display: none;
+			display: block;
 			margin-top: 80px;
 		}
 
@@ -17,7 +17,7 @@
 		}
 
 		#listForm {
-			display: block;
+			display: none;
 			margin-top: 40px;
 		}
 		
@@ -38,8 +38,6 @@
     <head>
         <title>Hello World</title>
 		<link rel='stylesheet' href='bootstrap.min.css'>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
     </head>
     <body>
 		<div id='header' style='color: white;' class='container'>
@@ -143,24 +141,6 @@
 		</div>
 		
 		<script>
-	  // Initialize Firebase
-		  var config = {
-			apiKey: "AIzaSyDnGe4xr7c2UqcEomBBBEM9pCK5F5J7JGA",
-			authDomain: "food-budget-suggestion-app.firebaseapp.com",
-			databaseURL: "https://food-budget-suggestion-app.firebaseio.com",
-			projectId: "food-budget-suggestion-app",
-			storageBucket: "food-budget-suggestion-app.appspot.com",
-			messagingSenderId: "75561022399"
-		  };
-		  firebase.initializeApp(config);
-		  
-		  var database = firebase.database();
-            var ref = database.ref('items');
-            var sel = database.ref('selected');
-            var rootRef = database.ref();
-		</script>
-		
-		<script>
 			
 			var items = [];
             var input;
@@ -173,7 +153,6 @@
 			var initialBudget;
             var temp = 0, total = 0, tempTotal = 0;    
 			
-			readData();
 			getJSONData();
 			initialBudget = budget;
 			
@@ -310,32 +289,6 @@
                     document.getElementById('initialBudget').innerText = budget;
                 }
             }
-			
-			function readData() {
-                var read = rootRef.child('items').orderByChild('price').endAt(500);   
-
-                read.on('child_added', snap => {
-                    
-                    let name = snap.child('name').val();
-                    let price = snap.child('price').val();
-
-                    
-                    let tableRow = "<tr onclick='selectRow(this)'>";
-                    tableRow += "<td id='selectedItem'><span><center>"+ name +"</center></span></td>";
-                    tableRow += "<td id='selectedPrice'><center>" + price + "</center></td></tr>";
-                
-                    $('#table').append(tableRow);
-                
-                    var data = {name, price};
-                    
-                    if(items.push(data)){
-                    console.log("Success");
-                    }else {
-                    console.log("Failed");
-                    }
-                });
-            }
-			
 		</script>
     </body>
 </html>
