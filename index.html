@@ -8,22 +8,27 @@
 
 		#mainForm {
 			display: block;
-			margin-top: 80px;
+			padding-top: 120px;
 		}
 
 		#inputForm {
     		display: none;
-			margin-top: 160px;
+			padding-top: 160px;
 		}
 
 		#listForm {
 			display: none;
-			margin-top: 40px;
+			padding-top: 90px;
 		}
 		
 		#showForm {
 			display: none;
-			margin-top: 40px;
+			padding-top: 40px;
+		}
+		
+		#devForm {
+			display: none;
+			padding-top: 40px;
 		}
 		
 		#header {
@@ -31,6 +36,7 @@
 			height: 60px;
 			background: #2980b9;
 			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			position: fixed;
 		}
 		
 	</style>
@@ -40,20 +46,21 @@
 		<link rel='stylesheet' href='bootstrap.min.css'>
     </head>
     <body>
-		<div id='header' style='color: white;' class='container'>
-			<h3>Food Budget Suggestion</h3>
+		<div id='header' style='color: white; padding-top: 15px;' class='container-fluid'>
+			<h5>Food Budget Suggestion</h5>
 		</div>
         <div id='mainForm' class='container-fluid'>
             <center>
 				<img src='logo-fbs.png' style='width: 200px'><br><br>
                 <label for="fbs">Food Budget Suggestion</label><br><br>
 				<label for="fbs">(Kanto version)</label><br><br>
-                <Button onclick='nextMain()' class='btn btn-default' style='width: 25%'><center>Proceed</center></Button>
+                <Button onclick='toggle_tabs(2)' class='btn btn-default' style='width: 50%;'><center>Proceed</center></Button>
 				<br><br>
-                <Button onclick='about()' class='btn btn-default' style='width: 25%'><center>About</center></Button>
+                <Button onclick='about()' class='btn btn-default'  style='width: 50%;'><center>About</center></Button>
 				<br><br>
-                <Button onclick='developer()' class='btn btn-default' style='width: 25%'><center>Developers</center></Button>
+                <Button onclick='toggle_tabs(4)' class='btn btn-default'  style='width: 50%;'><center>Developers</center></Button>
             </center>
+			<br><br>
         </div>
         <div id='inputForm' class='container-fluid'>
 		<center>
@@ -66,7 +73,7 @@
 		</div>     
 		<div id='listForm' class='container-fluid' style='width: 100%;'>
 			<span id='post-budget'></SPAn>
-			<div class='container-fluid'>
+			<div class='container'>
 			
                         <label for="price">Initial Budget: <span id='initialBudget'></span></label>
                         <br><br>
@@ -74,74 +81,80 @@
                         <br><br>
                         <label for="price">Budget Left: <span id='budgetLeft'></span></label>
                         <br><br>
-                        <button id='clear' onclick='clearShow()' class='btn btn-default'>Clear</button>
+						<center>
+                        <button id='clear' onclick='clearShow()' class='btn btn-default' style='width: 50%;'>Clear</button>
 						<br><br>
-						<button id='show' onclick='showList()' class='btn btn-default'>Show List</button>
+						<button id='show' onclick='showList()' class='btn btn-default' style='width: 50%;'>Show List</button>
 						<br><br>
-						<button id='back' onclick='backMenu()' class='btn btn-default'>Back to Menu</button>
+						<button id='back' onclick='backMenu()' class='btn btn-default' style='width: 50%;'>Back to Menu</button>
 						<br><br>
+						</center>
             </div>
 			<center>
 			<div>
-                <table class="table table-hover" style='border: solid 0.5px black;'>
-                    <thead>
-                        <tr>
-                            <th><center>Items</center></th>
-                            <th><center>Unit price</center></th>
-                        </tr>
-                    </thead>
-					<tbody id="table">        
-					
-                                    <tr  onclick='selectRow(this)'>
-                                        <td><center>Buko</center></td>
-                                        <td><center>5</center></td>
-                                    </tr>
-                                    <tr  onclick='selectRow(this)'>
-                                        <td><center>Isaw</center></td>
-                                        <td><center>5</center></td>
-                                    </tr>
-                                    <tr  onclick='selectRow(this)'>
-                                        <td><center>Hotdog</center></td>
-											<td><center>8</center></td>
-                                    </tr>
-                                    <tr  onclick='selectRow(this)'>
-                                        <td><center>Chicken Skin</center></td>
-                                        <td><center>5</center></td>
-                                    </tr>
-                                    <tr  onclick='selectRow(this)'>
-                                        <td><center>Rice</center></td>
-                                        <td><center>5</center></td>
-                                    </tr >
-                                    <tr  onclick='selectRow(this)'>
-                                        <td><center>Siomai</center></td>
-                                        <td><center>10</center></td>
-                                    </tr>
-                                    <tr  onclick='selectRow(this)'>
-											<td><center>Manok</center></td>
-                                        <td><center>20</center></td>
-                                    </tr>
-                                
-                    </tbody>
+                <table class="table table-hover" id='table'>
+                    
                 </table>                            
 			</div>	
 		</center>
+		<br><br>
 		</div>   
 		
 		<div id='showForm' class='container-fluid'>
-		<center>
-			<h3>Selected Items</h3>
-			<br><br>
-			<p id='show-select'></p>
-			<br><br>
-			Total: <p id='show-total'></p>
-			<br><br>
-			<button onclick='backList()' class='btn btn-default'>Back</button>
-			<button onclick='newList()' class='btn btn-default'>New</button>
-		</center>
+			<center>
+				<h3>Selected Items</h3>
+				<br><br>
+				<p id='show-select'></p>
+				<br><br>
+				<button onclick='toggle_tabs(1)' class='btn btn-default'>Back</button>
+				<button onclick='newList()' class='btn btn-default'>New</button>
+			</center>
+		<br><br>
+		</div>
+		
+		<div id='devForm' class='container-fluid'>
+			<div id='status'></div>
 		</div>
 		
 		<script>
+		
+		
+			var db = openDatabase('items', '1.0', 'items DB', 2 * 1024 * 1024);
 			
+			db.transaction(function (tx) {
+			   tx.executeSql('CREATE TABLE IF NOT EXISTS items (id unique, name, price)');
+			   tx.executeSql('INSERT INTO items (id, name, price) VALUES (1, "buko", 5)');
+			   tx.executeSql('INSERT INTO items (id, name, price) VALUES (2, "qwek-qwek", 15)');
+			});
+			
+			/*
+				var pair = "<tr><th><center>Items</center></th><th><center>Unit Price</center></th></tr>";
+				
+				var len = itemListIndex.length; 
+				for(var i = 0 ; i < len ; i++){
+					pair += "<tr onclick='selectRow(this)'><td><center>"+itemListName[i]+"</center></td><td><center>"+itemListPrice[i]+"</center></td></tr>";
+				}
+				document.getElementById('table').innerHTML = pair;
+			*/
+			
+			db.transaction(function (tx){
+				tx.executeSql('SELECT * FROM items', [], function (tx, results) {
+				  var len = results.rows.length, i;
+				  for (i = 0; i < len; i++){
+					 var pair = "<tr><th><center>Items</center></th><th><center>Unit Price</center></th></tr>";
+				
+					for(var i = 0 ; i < len ; i++){
+						pair += "<tr onclick='selectRow(this)'><td><center>"+results.rows.item(i).name+"</center></td><td><center>"+results.rows.item(i).price+"</center></td></tr>";
+					}
+					document.getElementById('table').innerHTML = pair;
+				  }
+			   }, null);
+			});
+			
+		</script>
+		
+		<script>
+		
 			var items = [];
             var input;
             var selectItems = [];
@@ -152,9 +165,65 @@
             var budget = 0;
 			var initialBudget;
             var temp = 0, total = 0, tempTotal = 0;    
+			var mainForm = document.getElementById("mainForm");
+            var inputForm = document.getElementById("inputForm");
+            var listForm = document.getElementById("listForm");
+			var showForm = document.getElementById("showForm");
+			var devForm = document.getElementById("devForm");
 			
 			getJSONData();
+			
 			initialBudget = budget;
+			
+			function toggle_tabs(windows) {
+				for(var i = 0 ; i < 4 ; i++) {
+					if(i == windows){
+						showWindow(i);
+					}else {
+						hideWindow(i);
+					}
+				}
+			}
+			
+			function showWindow(i) {
+				switch(i) {
+					case 0:
+						mainForm.style.display = "block";
+						break;
+					case 1:
+						listForm.style.display = "block";
+						break;
+					case 2:
+						inputForm.style.display = "block";
+						break;
+					case 3:
+						showForm.style.display = "block";
+						break;
+					case 4:
+						devForm.style.display = "block";
+						break;
+				}
+			}
+			
+			function hideWindow(i) {
+				switch(i) {
+					case 0:
+						mainForm.style.display = "none";
+						break;
+					case 1:
+						listForm.style.display = "none";
+						break;
+					case 2:
+						inputForm.style.display = "none";
+						break;
+					case 3:
+						showForm.style.display = "none";
+						break;
+					case 4:
+						devForm.style.display = "none";
+						break;
+				}
+			}
 			
 			function clearShow() {	
                 document.getElementById('priceValue').innerText = "";
@@ -182,81 +251,33 @@
                     itemListPrice[i] = obj.items[i].price;
                 }
             }
-		
-			function nextMain() {
-				var mainForm = document.getElementById("mainForm");
-                var inputForm = document.getElementById("inputForm");
-                var listForm = document.getElementById("listForm");
-				var showForm = document.getElementById("showForm");
-				mainForm.style.display = "none";
-                listForm.style.display = "none";
-                inputForm.style.display = "block";
-				showForm.style.display = "none";
-            }
-
-			function nextInput() {
-				var mainForm = document.getElementById("mainForm");
-                var inputForm = document.getElementById("inputForm");
-                var listForm = document.getElementById("listForm");
-				var showForm = document.getElementById("showForm");
-				mainForm.style.display = "none";
-                inputForm.style.display = "none";
-                listForm.style.display = "block";
-				showForm.style.display = "none";
-			}
 			
-			function showList() {
-			
-				var mainForm = document.getElementById("mainForm");
-                var inputForm = document.getElementById("inputForm");
-                var listForm = document.getElementById("listForm");
-				var showForm = document.getElementById("showForm");
-				mainForm.style.display = "none";
-                inputForm.style.display = "none";
-                listForm.style.display = "none";
-				showForm.style.display = "block";
-				
+			function showList() {			
 				listSelect();
+				toggle_tabs(3);
 			}
 			
 			function listSelect(){
 				var show = "";
+				
 				for(var i = 0 ; i < selectItemIndex.length ; i++) {
 					show += selectItemName[i] + ' --------- ' + selectItemPrice[i] + '\n';
 				}
-				
 				document.getElementById('show-select').innerText = show;
-				document.getElementById('show-total').innerText = total;
-				
 			}
-			
-			function backList(){
-				nextInput();
-			}	
-			
+						
 			function newList(){
-				nextInput();
 				clearShow();
+				toggle_tabs(1);
 			}
 			
-			function backMenu(){
-				
-				var empty = "";
-				
-					document.getElementById('budget').innerText = empty;
-					var mainForm = document.getElementById("mainForm");
-					var inputForm = document.getElementById("inputForm");
-					var listForm = document.getElementById("listForm");
-					var showForm = document.getElementById("showForm");
-					mainForm.style.display = "block";
-					listForm.style.display = "none";
-					inputForm.style.display = "none";
-					showForm.style.display = "none";
-					clearShow();
+			function backMenu(){	
+				clearShow();
+				toggle_tabs(0);
 			}
 
 			function saveBudget() {
-				nextInput();
+				toggle_tabs(1);
 				budget = parseInt(document.getElementById("budget").value);	
 				
 				if(!isNaN(budget)) {
@@ -264,7 +285,7 @@
 					document.getElementById('initialBudget').innerText = budget;
 				}else {
 					alert('Invalid!');
-					nextMain();
+					toggle_tabs(2);
 				}
 			}
 			
@@ -274,7 +295,6 @@
                 temp = budget - total;
                 if(temp < -1) {
                     console.log("Tama na");
-					tempTotal = total;
                 }
                 else if(selectPrice.push(itemListPrice[x.rowIndex-1])){
                     console.log('success kaayo!');
@@ -284,11 +304,22 @@
 					selectItemName.push(itemListName[x.rowIndex-1]);
 					selectItemPrice.push(itemListPrice[x.rowIndex-1]);
 				
-                    document.getElementById('priceValue').innerText = tempTotal;
+                    document.getElementById('priceValue').innerText = total;
                     document.getElementById('budgetLeft').innerText = temp;
                     document.getElementById('initialBudget').innerText = budget;
                 }
             }
+			/*
+			function show() {
+				var pair = "<tr><th><center>Items</center></th><th><center>Unit Price</center></th></tr>";
+				
+				var len = itemListIndex.length; 
+				for(var i = 0 ; i < len ; i++){
+					pair += "<tr onclick='selectRow(this)'><td><center>"+itemListName[i]+"</center></td><td><center>"+itemListPrice[i]+"</center></td></tr>";
+				}
+				document.getElementById('table').innerHTML = pair;
+			}
+			*/
 		</script>
     </body>
 </html>
