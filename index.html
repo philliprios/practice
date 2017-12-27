@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html>
 	<style>
 		* {
@@ -83,16 +83,16 @@
 				<img src='Rios.jpg' alt='Rios' class="img-rounded" style='width: 150px; height: 100px;'/>
 				<h4>Phillip Arman Rios</h4>
 				<br><br>
-				<img src='Sinadjan.jpg' alt='Sinadjan' class="img-rounded" style='width: 150px; height: 100px;'/>
+				<img src='Sinadjan2.jpg' alt='Sinadjan' class="img-rounded" style='width: 150px; height: 100px;'/>
 				<h4>Harold Sinadjan</h4>
 				<br><br>
-				<img src='Sarabia.jpg' alt='Sarabia' class="img-rounded" style='width: 150px; height: 100px;'/>
+				<img src='Sarabia3.jpg' alt='Sarabia' class="img-rounded" style='width: 150px; height: 100px;'/>
 				<h4>Mark Rezzel Sarabia</h4>
 				<br><br>
 				<img src='Taganahan.jpg' alt='Taganahan'class="img-rounded" style='width: 150px; height: 100px;'/>
 				<h4>Jaymark Mark Taganahan</h4>
 				<br><br>
-				<img src='Galindo.jpg' alt='Galindo'class="img-rounded" style='width: 150px; height: 100px;'/>
+				<img src='Galindo2.jpg' alt='Galindo'class="img-rounded" style='width: 150px; height: 100px;'/>
 				<h4>Chenny Galindo</h4>
 				<br><br>
 				</center>
@@ -123,14 +123,12 @@
 		</div>     
 		<div id='listForm' class='container-fluid' style='width: 100%;'>
 			<span id='post-budget'></SPAn>
-			<div class='container'>
-			
-                        <label for="price">Initial Budget: <span id='initialBudget'></span></label>
-                        <br><br>
-                        <label for="price">Total Cost: <span id='priceValue'></span></label>
-                        <br><br>
-                        <label for="price">Budget Left: <span id='budgetLeft'></span></label>
-                        <br><br>
+			<div class='container'> 
+						<table style='font-size: 18px;' class='table'>
+							<tr><td>Initial Budget: </td><td id='initialBudget'></td></tr>
+							<tr><td>Total Cost: </td><td id='priceValue'></td></tr>
+							<tr><td>Budget Left: </td><td id='budgetLeft'></td></tr>
+						</table>
 						<center>
                         <button id='clear' onclick='clearShow()' class='btn btn-default' style='width: 50%;'>Clear</button>
 						<br><br>
@@ -189,7 +187,7 @@
 			   tx.executeSql('INSERT INTO items (id, name, price) VALUES (18, "White Rabbit", 1)');
 			   tx.executeSql('INSERT INTO items (id, name, price) VALUES (19, "Lips", 1)');
 			   tx.executeSql('INSERT INTO items (id, name, price) VALUES (20, "Bubblegum", 1)');
-			    tx.executeSql('INSERT INTO items (id, name, price) VALUES (21, "Ice Candy", 5)');
+			   tx.executeSql('INSERT INTO items (id, name, price) VALUES (21, "Ice Candy", 5)');
 			});
 						
 		</script>
@@ -215,6 +213,7 @@
 			
 			initialBudget = budget;
 			
+			//CREDITS by Phil Rey
 			function toggle_tabs(windows) {
 				for(var i = 0 ; i < 6 ; i++) {
 					if(i == windows){
